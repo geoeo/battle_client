@@ -1,0 +1,27 @@
+
+skeleton.png
+size: 64,256
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+diamond_idle_1_crop
+  rotate: false
+  xy: 2, 142
+  size: 44, 68
+  orig: 44, 68
+  offset: 0, 0
+  index: -1
+diamond_idle_2_crop
+  rotate: false
+  xy: 2, 72
+  size: 44, 68
+  orig: 44, 68
+  offset: 0, 0
+  index: -1
+diamond_jump_crop
+  rotate: false
+  xy: 2, 2
+  size: 36, 68
+  orig: 36, 68
+  offset: 0, 0
+  index: -1
