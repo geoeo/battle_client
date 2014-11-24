@@ -5,12 +5,14 @@ public class AnimationController : MonoBehaviour {
 
 	public SkeletonAnimation skeletonAnimation;
 	public float speed;
+	public Rigidbody rigidBody;
 	
 	private string lastPlayedAnimation;
 	private float dodgeTimerInSeconds;
 	private float timeOfMostRecentDodge;
-	private float durationOfDodge;
 	private bool isDodgeActive;
+	private bool isJumpActive;
+	private bool isLanding;
 
 
 	// Use this for initialization
@@ -19,9 +21,10 @@ public class AnimationController : MonoBehaviour {
 		lastPlayedAnimation = string.Empty;
 		dodgeTimerInSeconds = 2;
 		timeOfMostRecentDodge = -5;
-		durationOfDodge = 0.3f;
 		isDodgeActive = false;
-		rigidbody.freezeRotation = true;
+		isJumpActive = false;
+		rigidBody.freezeRotation = true;
+		isLanding = false;
 	
 	}
 	
@@ -39,32 +42,54 @@ public class AnimationController : MonoBehaviour {
 				skeletonAnimation.state.AddAnimation(0,"walk_end",false,0);
 			}
 		} else if(Input.GetKey(KeyCode.A)){
-			if(isMoveReady(dodgeTimerInSeconds,timeOfMostRecentDodge)){
+			if(IsMoveReady(dodgeTimerInSeconds,timeOfMostRecentDodge)){
 				SetAnimationOnTrack("dodge",0,false);
 				MoveDodge();
 				timeOfMostRecentDodge = Time.time;
 				isDodgeActive = true;
 			}
-		} else if(IsTrackEmptyOn(0)) {
+		} else if(Input.GetKey(KeyCode.W) && IsNotMoving()) {
+			SetAnimationOnTrack("jump",0,true);
+			isJumpActive = true;
+			MoveJump();
+			
+		} else if(IsTrackEmptyOn(0) && IsNotMoving())  {
 			SetAnimationOnTrack("idle",0,true);
 		}
-		
-		if(isDodgeActive && Time.time > timeOfMostRecentDodge + durationOfDodge){
-			SetAnimationOnTrack("dodge_end",0,false);
-			isDodgeActive = false;
-//			rigidbody.freezeRotation =false;
+	
+		//todo fix landing
+		if(isJumpActive && !isLanding && rigidBody.velocity.y < 0 && skeletonAnimation.transform.position.y < 1.0){
+			SetAnimationOnTrack("jump_end",0,false);
+			isLanding = true;
 		}
+		
+
+		
 		          
 	}
-
+	
+	// Called form CollisionController
+	public void HasLanded(){
+		if(isJumpActive){
+			SetAnimationOnTrack("idle",0,true);
+			isJumpActive = false;
+			isLanding = false;
+			rigidBody.freezeRotation = true;
+		} else if (isDodgeActive){
+			SetAnimationOnTrack("dodge_end",0,false);
+			isDodgeActive = false;
+		}	
+	}
+	
 	void SetAnimationOnTrack(string animationName,int track, bool looping)
 	{
 		if(animationName.Equals(lastPlayedAnimation))
 			return;
 		skeletonAnimation.state.SetAnimation(track,animationName,looping);
 		lastPlayedAnimation = animationName;
+		
 	}
-	
+
 	bool IsAnimationBeingPlayedOnTrack(string animationName, int track){
 		
 		if(skeletonAnimation.state.GetCurrent(track) == null)
@@ -80,21 +105,32 @@ public class AnimationController : MonoBehaviour {
 
 	void MoveRight ()
 	{
-		Vector3 position = rigidbody.position;
+		Vector3 position = rigidBody.position;
 		position.x += speed;
-		rigidbody.position = position;
+		rigidBody.position = position;
 	}
 	
 	void MoveDodge ()
 	{
-//		rigidbody.freezeRotation = true;
-		rigidbody.AddForce(Vector3.up * 100);
-		rigidbody.AddForce(Vector3.left * 200);
+		rigidBody.AddForce(Vector3.up * 100);
+		rigidBody.AddForce(Vector3.left * 200);
 	
 	}
 	
-	bool isMoveReady(float timer,float timeOfLastExecution){
+	void MoveJump(){
+		rigidBody.AddForce(Vector3.up *110);
+	}
+	
+	bool IsMoveReady(float timer,float timeOfLastExecution){
 		return Time.time > timeOfLastExecution + timer;
 
+	}
+	
+	bool IsNotMoving(){
+		return !(isDodgeActive && isJumpActive); 
+	}
+	
+	public bool IsDodging() {
+		return isDodgeActive;
 	}
 }
