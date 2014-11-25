@@ -58,7 +58,7 @@ public class AnimationController : MonoBehaviour {
 		}
 	
 		//todo fix landing
-		if(isJumpActive && !isLanding && rigidBody.velocity.y < 0 && skeletonAnimation.transform.position.y < 1.0){
+		if(isJumpActive && !isLanding && rigidBody.velocity.y < 0 && skeletonAnimation.transform.position.y < 1.2){
 			SetAnimationOnTrack("jump_end",0,false);
 			isLanding = true;
 		}
@@ -74,7 +74,6 @@ public class AnimationController : MonoBehaviour {
 			SetAnimationOnTrack("idle",0,true);
 			isJumpActive = false;
 			isLanding = false;
-			rigidBody.freezeRotation = true;
 		} else if (isDodgeActive){
 			SetAnimationOnTrack("dodge_end",0,false);
 			isDodgeActive = false;
@@ -118,7 +117,7 @@ public class AnimationController : MonoBehaviour {
 	}
 	
 	void MoveJump(){
-		rigidBody.AddForce(Vector3.up *110);
+		rigidBody.AddForce(Vector3.up *350);
 	}
 	
 	bool IsMoveReady(float timer,float timeOfLastExecution){
@@ -127,10 +126,10 @@ public class AnimationController : MonoBehaviour {
 	}
 	
 	bool IsNotMoving(){
-		return !(isDodgeActive && isJumpActive); 
+		return !(isDodgeActive || isJumpActive); 
 	}
 	
-	public bool IsDodging() {
+	bool IsDodging() {
 		return isDodgeActive;
 	}
 }
