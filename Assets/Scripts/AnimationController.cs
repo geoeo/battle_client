@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using Utils;
 
 public class AnimationController : MonoBehaviour {
 
@@ -8,19 +9,17 @@ public class AnimationController : MonoBehaviour {
 	public Rigidbody rigidBody;
 	
 	private string lastPlayedAnimation;
-	private float dodgeTimerInSeconds;
-	private float timeOfMostRecentDodge;
 	private bool isDodgeActive;
 	private bool isJumpActive;
 	private bool isLanding;
+	private OneShot dodgeOneShot;
 
 
 	// Use this for initialization
 	void Start () {
 	
-		lastPlayedAnimation = string.Empty;
-		dodgeTimerInSeconds = 2;
-		timeOfMostRecentDodge = -5;
+		lastPlayedAnimation = string.Empty;;
+		dodgeOneShot = new OneShot(2,-5);
 		isDodgeActive = false;
 		isJumpActive = false;
 		rigidBody.freezeRotation = true;
@@ -42,10 +41,10 @@ public class AnimationController : MonoBehaviour {
 				skeletonAnimation.state.AddAnimation(0,"walk_end",false,0);
 			}
 		} else if(Input.GetKey(KeyCode.A)){
-			if(IsMoveReady(dodgeTimerInSeconds,timeOfMostRecentDodge)){
+			if(dodgeOneShot.IsMoveReadyWith(Time.time)){
 				SetAnimationOnTrack("dodge",0,false);
 				MoveDodge();
-				timeOfMostRecentDodge = Time.time;
+				dodgeOneShot.SetNewCallTime(Time.time);
 				isDodgeActive = true;
 			}
 		} else if(Input.GetKey(KeyCode.W) && IsNotMoving()) {
@@ -118,11 +117,6 @@ public class AnimationController : MonoBehaviour {
 	
 	void MoveJump(){
 		rigidBody.AddForce(Vector3.up *350);
-	}
-	
-	bool IsMoveReady(float timer,float timeOfLastExecution){
-		return Time.time > timeOfLastExecution + timer;
-
 	}
 	
 	bool IsNotMoving(){
