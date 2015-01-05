@@ -18,7 +18,7 @@ public class AnimationController : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 	
-		lastPlayedAnimation = string.Empty;;
+		lastPlayedAnimation = string.Empty;
 		dodgeOneShot = new OneShot(2,-5);
 		isDodgeActive = false;
 		isJumpActive = false;
@@ -30,17 +30,17 @@ public class AnimationController : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-		if(Input.GetKey(KeyCode.D)){
+		if(Input.GetKey(KeyCode.D) && !isJumpActive){
 			if(!IsAnimationBeingPlayedOnTrack("walk",0))
 				SetAnimationOnTrack("walk",0,false);	
 			MoveRight ();
-		} else if(Input.GetKeyUp(KeyCode.D)){
+		} else if(Input.GetKeyUp(KeyCode.D) && !isJumpActive){
 			if(IsTrackEmptyOn(0))
 				SetAnimationOnTrack("walk_end",0,false);
 			else{
 				skeletonAnimation.state.AddAnimation(0,"walk_end",false,0);
 			}
-		} else if(Input.GetKey(KeyCode.A)){
+		} else if(Input.GetKey(KeyCode.A) && !isJumpActive){
 			if(dodgeOneShot.IsMoveReadyWith(Time.time)){
 				SetAnimationOnTrack("dodge",0,false);
 				MoveDodge();
@@ -61,10 +61,7 @@ public class AnimationController : MonoBehaviour {
 			SetAnimationOnTrack("jump_end",0,false);
 			isLanding = true;
 		}
-		
-
-		
-		          
+	
 	}
 	
 	// Called form CollisionController
