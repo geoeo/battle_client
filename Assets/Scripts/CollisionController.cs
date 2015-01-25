@@ -1,10 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections;
+using Animation;
 
 public class CollisionController : MonoBehaviour {
 
 	public LayerMask groundMask;
-	public AnimationController animationController;
+	public AnimationManager animationManager;
+	public StateMessageDispatcher mStateMessageDispatcher;
 
 	// Use this for initialization
 	void Start () {
@@ -17,7 +19,9 @@ public class CollisionController : MonoBehaviour {
 	}
 	
 	void OnCollisionEnter(Collision c){
-		if((groundMask.value & 1<<c.gameObject.layer) != 0)
-			animationController.HasLanded();	
+		if((groundMask.value & 1<<c.gameObject.layer) != 0){
+			animationManager.HasLanded();
+			mStateMessageDispatcher.SendLanded();
+		}	
 	}
 }
