@@ -11,7 +11,7 @@ using System;
 using UnityEngine;
 using Utils;
 
-namespace Animation {
+namespace MH_Animation {
 
 	public class AnimationManager : MonoBehaviour
 	{

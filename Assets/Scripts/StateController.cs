@@ -1,11 +1,13 @@
 ﻿using UnityEngine;
 using System.Collections;
-using Animation;
+using MH_Animation;
 
 public class StateController : MonoBehaviour {
 
 	public AnimationManager mAnimationManager;
 	public StateMessageDispatcher mStateMessagDispatcher;
+//	public RenderManager dodgeIllusion;
+	public Transform movingTransform;
 	
 
 
@@ -31,6 +33,9 @@ public class StateController : MonoBehaviour {
 		} else if(Input.GetKey(KeyCode.A) && !mAnimationManager.isJumpActive){
 			if(mAnimationManager.dodgeOneShot.IsMoveReadyWith(Time.time)){
 				mAnimationManager.isDodgeActive = true;
+				
+//				dodgeIllusion.transform.position = new Vector3(movingTransform.position.x,movingTransform.position.y,movingTransform.position.z);
+//				dodgeIllusion.gameObject.SetActive(true);
 				mAnimationManager.SetAnimationOnTrack("dodge",0,false);
 				mAnimationManager.MoveDodge();
 				mAnimationManager.dodgeOneShot.SetNewCallTime(Time.time);
@@ -52,7 +57,6 @@ public class StateController : MonoBehaviour {
 			mStateMessagDispatcher.SendIdle();
 		}
 	
-		//todo fix landing
 
 	
 	}

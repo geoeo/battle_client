@@ -1,0 +1,36 @@
+{
+"skeleton": { "hash": "shWQcSRCoFxTSmbdTMMmeHOv9qE", "spine": "2.1.09", "width": 36.77, "height": 36.76, "images": "" },
+"bones": [
+	{ "name": "root", "rotation": 135 }
+],
+"slots": [
+	{ "name": "blade", "bone": "root", "attachment": "blade" }
+],
+"skins": {
+	"default": {
+		"blade": {
+			"blade": { "rotation": 90, "width": 20, "height": 32 }
+		}
+	}
+},
+"animations": {
+	"cut": {
+		"bones": {
+			"root": {
+				"rotate": [
+					{ "time": 0, "angle": 0 },
+					{ "time": 0.1666, "angle": -20.33 },
+					{ "time": 0.2666, "angle": -85.85 },
+					{ "time": 0.3333, "angle": -118.01 }
+				],
+				"translate": [
+					{ "time": 0, "x": 0, "y": 0 },
+					{ "time": 0.1666, "x": 90.55, "y": -20.58 },
+					{ "time": 0.2666, "x": 129.9, "y": -96.25 },
+					{ "time": 0.3333, "x": 39.01, "y": -116.86 }
+				]
+			}
+		}
+	}
+}
+}

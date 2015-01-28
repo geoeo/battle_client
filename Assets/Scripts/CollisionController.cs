@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
-using Animation;
+using MH_Animation;
 
 public class CollisionController : MonoBehaviour {
 
